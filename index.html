@@ -13,7 +13,33 @@
             <p>{{ message }}</p>
             <button v-on:click="reverseMessage">Reverse Message</button>
         </div>
+        
+        <div>
+            <video id="myVideo" width="640" height="480" autoplay controls></video>
+        </div>
+        
+        <button onClick="startWebCam();">Start WebCam</button>
         <script>
+
+            // 動画を流す準備
+            var video = document.getElementById("myVideo");
+            var webcamStream;
+            // gerUserMediaによるカメラ映像の取得
+            var media = navigator.mediaDevices.getUserMedia({
+                video: true, // ビデオを取得する
+                // 使うカメラを院カメラか背面カメラかを指定する場合は下記
+                // video: { facingMode: "environment"} // 背面カメラ
+                // video: { facingMode: "user"} // インカメラ
+                audio: false, // 音声が必要な場合はtrue
+            });
+
+            function startWebcam() {
+                // リアルタイムに再生（ストリーミング）させる
+                media.then((stream) => {
+                    video.srcObject = stream;
+                })
+            }
+
             // service workerの登録関係
             if ("serviceWorker" in navigator){
                 navigator.serviceWorker.register("service_worker.js")
